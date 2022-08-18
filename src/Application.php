@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -14,8 +15,10 @@ declare(strict_types=1);
  * @since     3.3.0
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App;
 
+use App\Service\Notify;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
@@ -64,6 +67,7 @@ class Application extends BaseApplication
         }
 
         // Load more plugins here
+        $this->addPlugin('Cake/Queue');
     }
 
     /**
@@ -115,6 +119,7 @@ class Application extends BaseApplication
      */
     public function services(ContainerInterface $container): void
     {
+        $container->add(Notify::class);
     }
 
     /**

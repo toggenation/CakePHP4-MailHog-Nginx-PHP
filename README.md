@@ -1,29 +1,40 @@
-# Docker Compose CakePHP 4 Setup
+# CakePHP 4 Queue on Docker
 
-## Features
-* mailhog
-* MySQL 
-* nginx
-* php-fpm
+1. Clone this repo 
 
-Using a `docker-compose.yaml` file
-
-Clone this repo and rename `~/env.example` to `.env` then run
+```
+git clone https://github.com/toggenation/cakephp4-queue
+```
 
 
 
+2. Rename `~/env.example` to `.env` 
+
+3. Modify the PORTS in `.env` to not conflict with other Docker containers
+
+
+4. Build
 ```
 docker-compose build
 ```
 
+5. Install deps
 ```
-composer install 
+composer install
+composer require cakephp/queue
+composer require enqueue/redis predis/predis:^1
+bin/cake plugin load 'Cake/Queue'
 ```
 
-Edit `config/app_local.php`
+Edit `config/app_local.php` and get the `.env` DB settings
+
+* Add DB
+* Mail settings
+* Queue config array
+
+### DB
 
 ```php
-
   // config/app_local.php
  'default' => [
             /* change values to match .env values
@@ -37,6 +48,12 @@ Edit `config/app_local.php`
             'password' => 'devtest',
             'database' => 'devtest',
         ],
+
+```
+
+### Email
+
+```php
 
  'EmailTransport' => [
         'default' => [
@@ -55,38 +72,48 @@ Edit `config/app_local.php`
         ],
     ],
 ```
+### Cake/Queue
+
+```php
+'Queue' => [
+    'default' => [
+        // A DSN for your configured backend. default: null
+        'url' => 'redis://redis',
+
+        // The queue that will be used for sending messages. default: default
+        // This can be overriden when queuing or processing messages
+        'queue' => 'default',
+
+        // The name of a configured logger, default: null
+        'logger' => 'stdout',
+
+        // The name of an event listener class to associate with the worker
+        'listener' => \App\Listener\WorkerListener::class,
+
+        // The amount of time in milliseconds to sleep if no jobs are currently available. default: 10000
+        'receiveTimeout' => 10000,
+    ]
+],
+```
+```sh
+docker-compose up -d
+```
+
+### Connect to web
+
+If NGINX_PORT is in `.env` as follows then [http://localhost:8080](http://localhost:8080)
 
 ```
-docker-compose up
+// .env
+NGINX_PORT=8080
 ```
+
+### Install Cross Platform Redis GUI
+Another Redis Desktop Manager
+[https://github.com/qishibo/AnotherRedisDesktopManager](https://github.com/qishibo/AnotherRedisDesktopManager)
+
+
+
 
 ### Video Timings
-I put a video of this up on Youtube [https://youtu.be/uoOb6u3_NU8](https://youtu.be/uoOb6u3_NU8)
-
-00:00 Intro\
-00:24 Install Remote - SSH VSCode extension\
-01:33 Enable SSH Public Key Authentication on remote Linux Host\
-03:23 Remote Linux Host Setup\
-04:00 Install PHP & Composer & Docker & Docker Compose on remote Linux Host\
-12:47 Using FileZilla to copy files up to Linux\
-14:21 docker-compose.yaml overview of services & containers\
-21:46 Install Docker Extension\
-22:10 Run docker-compose up & fix permission errors\
-28:08 docker-compose up -d to build and run containers\
-32:35 Connecting to container services over the network from Windows 10\
-33:06 Fix permissions errors after getting containers running\
-35:04 Fixing problem of running docker after change to group membership to allow normal user to access docker\
-40:05 Install Remote Containers Extension in VS Code\
-41:00 Connect to Remote Docker PHP Container\
-43:30 Connect to Mailhog Dashboard over the network\
-44:00 Download & Install MySQL Workbench\
-46:30 Configure MySQL Workbench to connect to Remote MySQL Server Container\
-49:00 Connect cakephp to MySQL database\
-52:00 Create a "Posts" table using a migration\
-53:35 Crate a Mailer class using bin/cake bake\ 
-55:13 Install PHP Intelephense\
-55:56 Configure EmailTransport to use mailhog\
-57:10 Send email using Mailer class from controller action\
-1:01:25 XDebug\
-1:06:18 Intalling Git version control in a container and upload project to Github\
-1:12:17 Wrap up
+I put a video of this up on Youtube []()

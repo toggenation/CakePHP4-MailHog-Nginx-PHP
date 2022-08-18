@@ -20,7 +20,7 @@ RUN docker-php-ext-install intl pdo pdo_mysql
 RUN cd /usr/local/etc/php/conf.d/ && \
     echo 'memory_limit = 512M' >> /usr/local/etc/php/conf.d/docker-php-ram-limit.ini
 
-ARG VERSION=v16.14.0
+ARG VERSION=v18.7.0
 
 RUN mkdir /build && apArch=$(arch); \
     case "$apArch" in \
@@ -28,7 +28,7 @@ RUN mkdir /build && apArch=$(arch); \
     aarch64) export DISTRO='linux-arm64' ;;\
     esac;\ 
     cd /build && \
-    wget https://nodejs.org/dist/v16.14.0/node-${VERSION}-${DISTRO}.tar.xz && \
+    wget https://nodejs.org/dist/${VERSION}/node-${VERSION}-${DISTRO}.tar.xz && \
     tar -xvf node-${VERSION}-${DISTRO}.tar.xz --strip-components=1 -C /usr/local
 
 RUN pecl install xdebug \

@@ -1,6 +1,13 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
+  redis:
+    image: redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    networks:
+      - cakephp-queue-net
   nginx:
     image: nginx:latest
     ports:
@@ -15,7 +22,7 @@ services:
       - '~/.config/composer/:/root/.config/composer:cached'
       - vscode-extensions:/root/.vscode-server/extensions
     networks:
-      - devtest-net
+      - cakephp-queue-net
     links:
       - php
       - mailhog
@@ -26,12 +33,12 @@ services:
     # image: php:fpm
     restart: unless-stopped
     build:
-       context: ./docker/config/php/
-       dockerfile: Dockerfile
+      context: ./docker/config/php/
+      dockerfile: Dockerfile
     extra_hosts:
       - 'host.docker.internal:host-gateway'
     networks:
-      - devtest-net
+      - cakephp-queue-net
     volumes:
       - .:/var/www/html
       - ./docker/config/php/php.ini:/usr/local/etc/php/php.ini
@@ -49,13 +56,13 @@ services:
       MYSQL_PASSWORD: '${DB_PASSWORD}'
       MYSQL_ROOT_HOST: '%'
     volumes:
-      - 'devtest:/var/lib/mysql'
+      - 'cakephp-queue:/var/lib/mysql'
       # delegated'
       # /etc/mysql/conf.d for x64
       # for arm image
       # - './docker/config/mysql/my.cnf:/etc/my.cnf'
     networks:
-      - devtest-net
+      - cakephp-queue-net
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}" ]
       retries: 3
@@ -67,12 +74,12 @@ services:
       - '${FORWARD_MAILHOG_PORT:-1025}:1025'
       - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
     networks:
-      - devtest-net
+      - cakephp-queue-net
 networks:
-  devtest-net:
+  cakephp-queue-net:
     driver: bridge
 volumes:
-  devtest:
+  cakephp-queue:
     driver: local
   vscode-extensions:
     driver: local

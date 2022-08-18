@@ -1,0 +1,30 @@
+.fix label {
+    font-weight: 400;
+    margin-bottom: 0px;
+}
+
+.fix input {
+    margin-right: 6px;
+}
+
+
+/* .error-message {
+    margin-top: -10px;
+    color: red;
+    margin-bottom: 20px;
+} */
+
+/* 
+.error-message {
+    margin-top: -20px;
+    color: red;
+    margin-bottom: 20px;
+} */
+
+
+
+/* .fix label::before {
+
+    content: "Read this: ";
+
+} */

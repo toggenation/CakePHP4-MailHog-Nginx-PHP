@@ -1,9 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class Posts extends AbstractMigration
+class AddNotifiedFieldToUsersTable extends AbstractMigration
 {
     /**
      * Change Method.
@@ -14,9 +15,8 @@ class Posts extends AbstractMigration
      */
     public function change()
     {
-        $this->table('posts')
-            ->addColumn('title', 'string')
-            ->addColumn('body', 'string')
-            ->create();
+        $this->table('users')
+            ->addColumn('notified', 'boolean', ['default' => false])
+            ->update();
     }
 }
