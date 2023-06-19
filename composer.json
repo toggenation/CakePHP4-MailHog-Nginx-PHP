@@ -26,7 +26,7 @@
         "cakephp/cakephp-codesniffer": "^4.5",
         "cakephp/debug_kit": "^4.5",
         "dereuromark/cakephp-ide-helper": "^1.18",
-        "josegonzalez/dotenv": "^3.2",
+        "josegonzalez/dotenv": "^4.0",
         "phpunit/phpunit": "~8.5.0 || ^9.3",
         "toggenation/plugin-lister": "dev-master"
     },
