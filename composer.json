@@ -19,7 +19,7 @@
         "google/recaptcha": "@stable",
         "league/oauth2-google": "@stable",
         "mobiledetect/mobiledetectlib": "^2.8",
-        "robthree/twofactorauth": "^1.5.2"
+        "robthree/twofactorauth": "^2.1.0"
     },
     "require-dev": {
         "cakephp/bake": "^2.6",
